@@ -28,7 +28,7 @@ A Shopify store dressed as an art portfolio. A custom theme, built in this repos
 | Timeline | Selling within months | Shopify from day one; checkout is live at launch, not a later phase |
 | Prices | Prints priced, originals "inquire" | Per-product sale mode: prints show Add to cart; originals show Inquire; either can be switched per piece |
 | Location and currency | United States, USD | Shopify Payments, Shopify Tax, Shopify Shipping, all US |
-| Inquiries | Site form that emails the artist | Shopify's native contact form, pre-filled with the artwork; delivered to the store email |
+| Inquiries | Site form that emails the artist | Shopify's native contact form, pre-filled with the artwork, delivered to the store email; no automatic reply unless Shopify Forms and Flow are used (section 3) |
 | Pages at launch | Gallery, artwork pages, About | Plus the policy pages Shopify requires for checkout (privacy, refund, shipping, terms), generated from templates |
 | Marketing | Instagram feed on the site | A feed app from the Shopify App Store; the official Meta channel can also tag products in posts |
 | Images | Some ready, some still to capture | Capture checklist included; launch proceeds with what exists |
@@ -48,7 +48,7 @@ A Shopify store dressed as an art portfolio. A custom theme, built in this repos
 - **Series** (`/collections/[series]`) — one page per series with an introduction. A Shopify collection per series, ordered by hand.
 - **Artwork** (`/products/[slug]`) — main image with zoom, detail images, title, year, medium, dimensions, description. Original block driven by sale mode: "Inquire about the original", "Sold", "Not for sale", or a price with Add to cart if you ever choose to sell an original directly. Prints block: size and paper as variants with prices, quantity, Add to cart. Previous and next within the series, related pieces, share image per piece.
 - **About** — portrait, artist statement, short bio, Instagram and contact links.
-- **Contact / Inquire** — Shopify's native contact form. When opened from an artwork the piece and, for prints, the chosen size are pre-filled into the message. Submissions go to the store's contact email.
+- **Contact / Inquire** — Shopify's native contact form. When opened from an artwork the piece and, for prints, the chosen size are pre-filled into the message. Submissions go to the store's contact email, with Shopify's hCaptcha for spam. The native form sends no automatic confirmation to the sender; if that matters, the free Shopify Forms app plus a Shopify Flow automation adds one, at the cost of less control over pre-filling. My recommendation for v1: native form, no auto-reply, and the artist answers personally.
 - **Cart and checkout** — Shopify's. Cart page styled by the theme; checkout is Shopify's hosted, Shop Pay-enabled page with tax and shipping calculated.
 - **Policies** — privacy, refund, shipping, terms of service, generated from Shopify's templates and edited by the artist.
 - **Utility** — 404, search, sitemap and robots (automatic), Open Graph metadata per product.
@@ -85,18 +85,18 @@ Metafield definitions are created once (M1) and appear as ordinary fields in the
 | Layer | Choice | Why |
 |---|---|---|
 | Platform | Shopify, Basic plan | Everything commercial is built and maintained by Shopify; the artist runs the store alone |
-| Theme | Custom theme in this repository, started from Shopify's current reference theme | Full design control for the palette-matched look and the masonry gallery, with cart, product forms, and checkout wiring already correct |
-| Theme tooling | Shopify CLI for local development and push; theme-check for linting in CI; a staging theme that auto-updates from the branch | Every change is reviewed on a preview URL before it is published |
+| Theme | Custom theme in this repository, started from Horizon, Shopify's current flagship theme; Skeleton as the fallback base if Horizon's structure fights the design | Full design control for the palette-matched look and the masonry gallery, with cart, product forms, and checkout wiring already correct |
+| Theme tooling | Shopify CLI for local development and push; theme-check for linting in CI; Shopify's GitHub integration syncing one dedicated branch to a staging theme | Every change is reviewed on a preview URL before it is published. The integration is two-way: edits made in Shopify's theme editor are committed back to the branch automatically |
 | Structured content | Metafield definitions and, where needed, metaobjects | Purpose-built fields without an external CMS |
 | Filtering | Search & Discovery app (first-party, free) | Storefront filters on metafields, tags, availability, and price without custom code |
 | Payments | Shopify Payments with Shop Pay | Lowest fees on Shopify, no third-party gateway surcharge |
-| Tax | Shopify Tax | Automatic US sales tax at checkout |
-| Shipping | Shipping profiles with flat rates by region; Shopify Shipping for discounted labels if self-fulfilling | No carrier API work |
+| Tax | Shopify Tax | Automatic US sales tax at checkout; free until $100,000 of US sales, then 0.35% per order capped at 99 cents |
+| Shipping | Shipping profiles with flat rates by region; Shopify Shipping for discounted labels if self-fulfilling | No carrier API work; Shopify Shipping on Basic covers USPS, UPS, FedEx, and DHL Express with no label fee beyond postage |
 | Print fulfilment (optional) | Printful, Gelato, or Printify app | Products sync from the app; orders route automatically |
-| Inquiries | Native contact form with spam protection, pre-filled by the theme | No email service to run |
-| Instagram | A feed app with a free tier | Handles Meta authorization and token renewal |
+| Inquiries | Native contact form with hCaptcha, pre-filled by the theme | No email service to run; no auto-reply, see section 3 |
+| Instagram | Instafeed app, free tier (grid or slider, hourly sync) | Handles Meta authorization and token renewal |
 | Analytics | Shopify Analytics, built in | Sales, sessions, top products; no extra tool |
-| Domain | Registered at Cloudflare at cost, pointed at Shopify | Cheaper than buying through Shopify; Cloudflare also gives free email forwarding |
+| Domain | Registered at Cloudflare at cost, pointed at Shopify | About $10 per year at Cloudflare versus about $16 through Shopify; Cloudflare also gives free email forwarding |
 
 **Alternatives considered**
 
@@ -110,17 +110,17 @@ Metafield definitions are created once (M1) and appear as ordinary fields in the
 
 | Service | Role | Plan | Cost | What I need from you |
 |---|---|---|---|---|
-| Shopify | Store, admin, checkout, payments, tax, shipping, analytics, hosting | Basic | See section 11 | The artist creates the store and completes Shopify Payments onboarding (identity and bank details); then either connects this GitHub repository to the store's theme library or installs the Theme Access app and gives me a token |
+| Shopify | Store, admin, checkout, payments, tax, shipping, analytics, hosting | Basic | See section 11 | The artist creates the store and completes Shopify Payments onboarding (name, date of birth, address, SSN or ITIN, and a US checking account); then installs the Theme Access app and sends me a password, since Basic includes no staff seats; optionally connects this GitHub repository to the store's theme library |
 | Cloudflare | Domain registration, DNS, free email forwarding | Free (domain at cost) | $10.44 per year for a .com today, about $11.15 after 1 November 2026 | Create the account and buy the domain; I provide the DNS records for Shopify |
 | Search & Discovery | Gallery filters | Free, first-party | $0 | Install from the App Store (one click) |
-| Instagram feed app | Feed on Home | Free tier | $0, paid tiers optional | Install, authorize with the Instagram business account once |
-| Print-on-demand app (optional) | Print fulfilment | Free app, per-order product cost | $0 monthly | Install the chosen app, connect, and set retail prices |
-| Meta "Facebook & Instagram" channel (optional) | Tag products in Instagram posts | Free | $0 | Connect the Instagram business account |
+| Instafeed | Feed on Home | Free tier; Pro at $8 per month adds product tagging | $0 | Install, authorize with the Instagram business account once |
+| Print-on-demand app (optional) | Print fulfilment | Free to install. Printful's giclée on enhanced matte or premium luster paper is confirmed; Gelato's and Printify's fine-art papers should be confirmed with samples | $0 monthly, product cost per order | Install the chosen app, connect, and set retail prices |
+| Meta "Facebook & Instagram" channel (optional) | Tag products in Instagram posts | Free | $0 | Needs a Facebook Page and business portfolio as well as the Instagram professional account; skip unless product tagging in posts is wanted |
 | GitHub | Theme source, CI | Free | $0 | Grant Claude's GitHub App access to this repository (currently blocked, see section 15) |
 
 I never need any password. Access to the store is by a scoped theme token or the GitHub connection.
 
-Facts marked "to confirm" elsewhere in this document are being checked against Shopify's current documentation and will be updated before build starts.
+Plan features, prices, limits, and tooling in this document were verified against Shopify's current documentation and pricing pages on 12 September 2026.
 
 ---
 
@@ -140,12 +140,12 @@ Rule that holds regardless of palette: artwork always sits on the neutral backgr
 
 ## 8. Milestones
 
-Each milestone ends with a preview URL on an unpublished staging theme. I do not proceed past M2 without your approval of the mockups, and nothing is published to the live storefront until M7.
+Each milestone ends with a preview link to an unpublished staging theme (visitor links expire after two days, so I generate a fresh one for each review). I do not proceed past M2 without your approval of the mockups, and nothing is published to the live storefront until M7.
 
 | # | Milestone | Contents | Done when |
 |---|---|---|---|
 | M0 | Setup (you and me) | Store created, Shopify Payments onboarding started, domain bought and pointed, theme access granted, sample images shared | I can push a theme to the store and open its preview URL |
-| M1 | Foundation | Theme scaffold from the reference theme, CLI workflow, theme-check in CI, branch-to-staging-theme sync, metafield definitions, sample products and collections | Staging theme updates from a push; a sample artwork shows all fields |
+| M1 | Foundation | Theme scaffold from Horizon, CLI workflow, theme-check in CI, branch-to-staging-theme sync, metafield definitions, sample products and collections | Staging theme updates from a push; a sample artwork shows all fields |
 | M2 | Design | Palette study, typography, style tile, mockups | You approve the mockups |
 | M3 | Gallery and artwork pages | Masonry collection section, Search & Discovery filters wired to the fields, series pages, product template with zoom, sale-mode logic, variants for prints, related and prev/next, share metadata | Lighthouse performance 80+ on mobile for gallery and product pages (Shopify's own scripts set the ceiling); fully keyboard-navigable |
 | M4 | Inquiries, About, policies | Contact template with pre-fill from artworks, About page, policy pages from templates | A test inquiry arrives at the store email with the right piece and size named |
@@ -169,7 +169,7 @@ Each milestone ends with a preview URL on an unpublished staging theme. I do not
 - **Performance.** Custom sections ship minimal JavaScript; images request exact widths from Shopify's CDN; layout shift zero through known aspect ratios. Shopify's checkout and app scripts set a floor that a custom theme cannot remove, so the target is 80+ on mobile rather than 90+.
 - **Accessibility.** Keyboard-navigable gallery, filters, and zoom; visible focus; required alt text on every product image; reduced motion respected; AA contrast on all text.
 - **SEO.** Per-product titles, descriptions, and share images; structured data for products; clean handles; Shopify's automatic sitemap.
-- **Privacy and security.** Shopify handles card data and PCI. The theme sets no cookies of its own beyond Shopify's. The native contact form has spam protection. Apps are kept to the minimum listed above.
+- **Privacy and security.** Shopify handles card data and PCI. The theme sets no cookies of its own beyond Shopify's. The native contact form uses hCaptcha. Apps are kept to the minimum listed above.
 - **Color fidelity.** sRGB uploads, images served at high quality, neutral surround in the zoom view.
 
 ---
@@ -178,12 +178,13 @@ Each milestone ends with a preview URL on an unpublished staging theme. I do not
 
 | Item | Monthly | Notes |
 |---|---|---|
-| Shopify Basic | $39, or $29 with annual billing | The subscription; to confirm against the current pricing page |
+| Shopify Basic | $39, or $29 with annual billing | Verified 12 September 2026. New stores get 3 days free, then $1 per month for the first 3 months |
 | Domain (.com at Cloudflare) | about $1 | $10.44 per year today; about $11.15 after 1 November 2026 |
 | Search & Discovery, Instagram feed app, print-on-demand app | $0 | Free tiers; paid tiers only if you choose them |
 | Card processing (Shopify Payments) | 2.9% plus 30 cents per online transaction | Per sale, not monthly |
+| Shopify Tax | $0 until $100,000 of US sales | Then 0.35% per order, capped at 99 cents |
 | Print-on-demand product cost | per order | Deducted from each print sale; margin is the retail price you set minus this |
-| **Total fixed** | **about $30 to $40** | Above the $25 ceiling from the interview, by your decision to sell within months |
+| **Total fixed** | **about $30 to $40** after the three promotional months | Above the $25 ceiling from the interview, by your decision to sell within months |
 
 Not needed: a paid theme, hosting, an email service, an external CMS, analytics tools.
 
@@ -193,7 +194,9 @@ Not needed: a paid theme, hosting, an email service, an external CMS, analytics 
 
 | Risk | Mitigation |
 |---|---|
-| Paying the subscription before the first sale | Annual billing lowers it; the store can open the moment the first prints are ready, since checkout is built in |
+| Paying the subscription before the first sale | The first three months cost $1 per month on Shopify's standard promotion, which covers most of the build; annual billing lowers it afterwards |
+| Theme-editor edits and repository edits collide, since the GitHub integration is two-way | The live theme is bound to one dedicated branch; feature work merges into it; the settings files are edited only through the theme editor |
+| Large scans are rejected on upload | Shopify caps images at 20 MB and 5,000 pixels per side; the capture checklist adds a resize step; full-size originals stay off-platform for printing |
 | A custom theme does not receive the reference theme's updates automatically | Kept deliberately small; Shopify's checkout and cart are outside the theme and always current |
 | App costs creep as features are added | Every app is listed in section 6; new ones need a yes from you |
 | Instagram feed app changes pricing or stops working | Swap for another app; the theme only reserves a section for it |
@@ -214,6 +217,7 @@ Not needed: a paid theme, hosting, an email service, an external CMS, analytics 
 - Resolution: at least 3,000 pixels on the long edge for the web. For prints made from these files, capture at 300 dots per inch at the largest print size you will offer.
 - Drawings and works on paper: scan at 600 dots per inch when they fit the scanner.
 - Export as sRGB JPEG at high quality or as TIFF; keep the originals.
+- Before uploading to Shopify: resize a copy to at most 5,000 pixels on the long side and under 20 MB. Keep the full-size original for printing.
 - File names: `year-title-slug.jpg`.
 
 ---
@@ -225,7 +229,7 @@ Not needed: a paid theme, hosting, an email service, an external CMS, analytics 
 3. Two or three candidate domain names, in order of preference. I check availability; the purchase is yours.
 4. The email address that should receive inquiries and orders.
 5. The Instagram handle.
-6. The Shopify store created by the artist, with Shopify Payments onboarding started, and either the GitHub connection made or a Theme Access token shared with me.
+6. The Shopify store created by the artist, with Shopify Payments onboarding started, and a Theme Access password sent to me (the app's delivery link expires after seven days).
 7. Initial print sizes, papers, and prices, or a note to use placeholders.
 8. A decision, or "sample first", on print-on-demand versus self-fulfilment.
 
@@ -234,7 +238,8 @@ Not needed: a paid theme, hosting, an email service, an external CMS, analytics 
 ## 15. Assumptions, open questions, and blockers
 
 - Blocker: Claude's GitHub App has no access to this repository, so nothing can be pushed here yet. Install it for the Mikki84 account at https://github.com/apps/claude/installations/select_target or reconnect GitHub under claude.ai Settings, Connectors.
-- Assumed: one store owner and no additional staff seats needed in v1.
+- Confirmed: Basic includes no staff seats. The artist is the owner; developer access is by Theme Access password, which needs no seat.
+- Open: whether an automatic confirmation email to people who send an inquiry matters enough to use Shopify Forms and Flow instead of the native form.
 - Assumed: English only, US shipping only at launch; international can be added as a shipping zone later.
 - Assumed: guest checkout; customer accounts off.
 - Open: how many pieces exist today and roughly how many arrive per month. Affects only pagination.
