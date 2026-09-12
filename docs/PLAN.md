@@ -1,12 +1,14 @@
 # Mikkii Art Website — Project Plan
 
-**Status:** Draft v0.2 (Shopify edition), awaiting approval. Nothing is built yet; this document is the only change on the branch.
+**Status:** v1.0, approved 2026-09-12. Build in progress on this branch.
 **Date:** 2026-09-12
 **Branch:** `claude/confident-johnson-gdgelg`
 
 Throughout, "you" is the person steering the project and "the artist" is whoever owns the work, the store, and the money. If that is the same person, read both as you.
 
 **What changed since v0.1.** You confirmed that selling starts within months. That makes a store platform worth paying for from day one, so the site moves from a custom Next.js build to Shopify with a custom theme developed in this repository. Shopify now provides checkout, payments, tax, shipping, inventory, order management, and print-on-demand integrations; the repository holds the theme, which is where all the design lives. The v0.1 stack (Next.js, Sanity, Cloudflare) is retired for this project.
+
+**Approved with these decisions.** Sales start immediately in small volume and a backlog of requests already exists, so the store is created first and the backlog is invoiced through draft orders before the theme is finished. Billing is monthly to start, revisited after the promotional months. Print fulfilment is decided after sample prints from Printful and Gelato, within two weeks. Inquiries use the native contact form with no automatic reply; the artist answers personally.
 
 ---
 
@@ -25,16 +27,16 @@ A Shopify store dressed as an art portfolio. A custom theme, built in this repos
 | Visual direction | Match the artwork's palette | Design starts with a palette study of 3 to 5 sample pieces; the theme's settings carry the result |
 | Gallery layout | Masonry grid | Custom collection section that respects each image's aspect ratio |
 | What is purchasable | Prints and reproductions | Prints are variants of the artwork product (size × paper), each with its own price |
-| Timeline | Selling within months | Shopify from day one; checkout is live at launch, not a later phase |
+| Timeline | Sales start immediately, small volume, with a backlog of requests | Store created first; backlog invoiced through draft orders before the theme is done; checkout live at launch |
 | Prices | Prints priced, originals "inquire" | Per-product sale mode: prints show Add to cart; originals show Inquire; either can be switched per piece |
 | Location and currency | United States, USD | Shopify Payments, Shopify Tax, Shopify Shipping, all US |
-| Inquiries | Site form that emails the artist | Shopify's native contact form, pre-filled with the artwork, delivered to the store email; no automatic reply unless Shopify Forms and Flow are used (section 3) |
+| Inquiries | Site form that emails the artist | Shopify's native contact form, pre-filled with the artwork, delivered to the store email; no automatic reply, the artist answers personally |
 | Pages at launch | Gallery, artwork pages, About | Plus the policy pages Shopify requires for checkout (privacy, refund, shipping, terms), generated from templates |
 | Marketing | Instagram feed on the site | A feed app from the Shopify App Store; the official Meta channel can also tag products in posts |
 | Images | Some ready, some still to capture | Capture checklist included; launch proceeds with what exists |
 | Budget | Under about $25 per month (interview) | Exceeded: Shopify Basic alone is more. Section 11 has the numbers |
 | Already exists | An Instagram business/creator account | No domain, brand assets, host, or store yet |
-| Print fulfilment | Undecided | Both paths are one-click on Shopify: a print-on-demand app, or self-fulfilment with Shopify Shipping labels |
+| Print fulfilment | Sample prints from Printful and Gelato first; decision within two weeks | Both paths are one-click on Shopify; the backlog is fulfilled by hand meanwhile |
 | Extras in v1 | Filter by series, medium, and size | Shopify's first-party Search & Discovery app filters by these fields |
 
 ---
@@ -48,7 +50,7 @@ A Shopify store dressed as an art portfolio. A custom theme, built in this repos
 - **Series** (`/collections/[series]`) — one page per series with an introduction. A Shopify collection per series, ordered by hand.
 - **Artwork** (`/products/[slug]`) — main image with zoom, detail images, title, year, medium, dimensions, description. Original block driven by sale mode: "Inquire about the original", "Sold", "Not for sale", or a price with Add to cart if you ever choose to sell an original directly. Prints block: size and paper as variants with prices, quantity, Add to cart. Previous and next within the series, related pieces, share image per piece.
 - **About** — portrait, artist statement, short bio, Instagram and contact links.
-- **Contact / Inquire** — Shopify's native contact form. When opened from an artwork the piece and, for prints, the chosen size are pre-filled into the message. Submissions go to the store's contact email, with Shopify's hCaptcha for spam. The native form sends no automatic confirmation to the sender; if that matters, the free Shopify Forms app plus a Shopify Flow automation adds one, at the cost of less control over pre-filling. My recommendation for v1: native form, no auto-reply, and the artist answers personally.
+- **Contact / Inquire** — Shopify's native contact form. When opened from an artwork the piece and, for prints, the chosen size are pre-filled into the message. Submissions go to the store's contact email, with Shopify's hCaptcha for spam. The native form sends no automatic confirmation to the sender; if that matters, the free Shopify Forms app plus a Shopify Flow automation adds one, at the cost of less control over pre-filling. Decided: native form, no auto-reply, and the artist answers personally. Shopify Forms plus Flow remains available if that changes.
 - **Cart and checkout** — Shopify's. Cart page styled by the theme; checkout is Shopify's hosted, Shop Pay-enabled page with tax and shipping calculated.
 - **Policies** — privacy, refund, shipping, terms of service, generated from Shopify's templates and edited by the artist.
 - **Utility** — 404, search, sitemap and robots (automatic), Open Graph metadata per product.
@@ -153,6 +155,15 @@ Each milestone ends with a preview link to an unpublished staging theme (visitor
 | M6 | Instagram and Home | Feed app installed and authorized, Home assembled from its sections | Feed renders; Home matches the mockup |
 | M7 | Content and launch | One-page "add an artwork" guide, artist enters the work, image QA, accessibility and performance audit, theme published, domain live, launch checklist | Live on the domain with real content and a working checkout |
 
+### Selling before the theme is live
+
+The backlog does not wait for M7. As soon as the store exists and Shopify Payments onboarding is complete:
+
+1. The artist creates a draft order in the admin for each waiting buyer (Orders, Create order), adds the print or original as a line item with the agreed price and shipping, and sends the invoice by email. The buyer pays on Shopify's hosted checkout; the order lands in the admin like any other.
+2. The storefront stays password-protected with a short "coming soon" note until the custom theme is ready, so no one sees an unstyled store. The password page can carry the contact email for new requests.
+3. Fulfilment by hand for these first orders, with Shopify Shipping labels from the order screen. If the print samples decide the question sooner, the print-on-demand app takes over from that point.
+4. First payouts from Shopify Payments take several business days to clear; plan for that before promising delivery dates.
+
 ---
 
 ## 9. After launch
@@ -178,7 +189,7 @@ Each milestone ends with a preview link to an unpublished staging theme (visitor
 
 | Item | Monthly | Notes |
 |---|---|---|
-| Shopify Basic | $39, or $29 with annual billing | Verified 12 September 2026. New stores get 3 days free, then $1 per month for the first 3 months |
+| Shopify Basic | $39 monthly to start; annual at $29 revisited after the promotion | Verified 12 September 2026. New stores get 3 days free, then $1 per month for the first 3 months |
 | Domain (.com at Cloudflare) | about $1 | $10.44 per year today; about $11.15 after 1 November 2026 |
 | Search & Discovery, Instagram feed app, print-on-demand app | $0 | Free tiers; paid tiers only if you choose them |
 | Card processing (Shopify Payments) | 2.9% plus 30 cents per online transaction | Per sale, not monthly |
@@ -204,7 +215,7 @@ Not needed: a paid theme, hosting, an email service, an external CMS, analytics 
 | Print-on-demand quality disappoints | Order a sample from each candidate before choosing; the theme is neutral to the provider |
 | Colors look different on the artist's screen versus visitors' | sRGB export, high-quality delivery, neutral surround; calibrate the artist's monitor before ordering print samples |
 | Artist uploads phone photos that look poor next to scans | Capture checklist below; an "image needs redo" tag in the admin |
-| Repository access for Claude is still blocked | Section 15; the theme can be pushed to Shopify directly by token in the meantime, but code history must reach GitHub |
+| Backlog buyers waiting on the theme | Draft orders invoice them from the admin the day the store exists; see "Selling before the theme is live" in section 8 |
 
 ---
 
@@ -231,16 +242,16 @@ Not needed: a paid theme, hosting, an email service, an external CMS, analytics 
 5. The Instagram handle.
 6. The Shopify store created by the artist, with Shopify Payments onboarding started, and a Theme Access password sent to me (the app's delivery link expires after seven days).
 7. Initial print sizes, papers, and prices, or a note to use placeholders.
-8. A decision, or "sample first", on print-on-demand versus self-fulfilment.
+8. Sample prints ordered from Printful and Gelato, so the fulfilment decision can be made within two weeks.
 
 ---
 
 ## 15. Assumptions, open questions, and blockers
 
-- Blocker: Claude's GitHub App has no access to this repository, so nothing can be pushed here yet. Install it for the Mikki84 account at https://github.com/apps/claude/installations/select_target or reconnect GitHub under claude.ai Settings, Connectors.
+- Resolved: Claude's GitHub App now has access to this repository; commits push normally.
 - Confirmed: Basic includes no staff seats. The artist is the owner; developer access is by Theme Access password, which needs no seat.
-- Open: whether an automatic confirmation email to people who send an inquiry matters enough to use Shopify Forms and Flow instead of the native form.
+- Decided: no automatic confirmation email; the artist replies personally.
 - Assumed: English only, US shipping only at launch; international can be added as a shipping zone later.
 - Assumed: guest checkout; customer accounts off.
 - Open: how many pieces exist today and roughly how many arrive per month. Affects only pagination.
-- Open: monthly versus annual Shopify billing. Annual is cheaper; monthly is easier to walk away from.
+- Decided: monthly billing to start; revisit annual after the promotional months.
