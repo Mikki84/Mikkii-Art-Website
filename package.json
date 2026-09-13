@@ -1,0 +1,14 @@
+{
+  "name": "mikkii-art-website",
+  "private": true,
+  "description": "Shopify theme and store scripts for Right Brain Studios",
+  "type": "module",
+  "scripts": {
+    "check": "shopify theme check",
+    "setup-store": "node scripts/setup-store.mjs",
+    "import": "node scripts/import-artworks.mjs"
+  },
+  "devDependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

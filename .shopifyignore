@@ -8,3 +8,7 @@ LICENSE-HORIZON.md
 .shopifyignore
 scripts/*
 .env.example
+package.json
+package-lock.json
+node_modules/*
+content/*
