@@ -1,6 +1,17 @@
 # Adding an artwork
 
-For the artist. Every piece is one product, copied from the template so the structure is always the same. Ten minutes per piece once the images are ready.
+For the artist. Every piece is one product with the same structure. Two routes: many pieces at once from the intake spreadsheet, or one at a time in the admin by copying the template product.
+
+## Bulk route: the intake spreadsheet
+
+1. Fill in `content/artworks-template.xlsx`, one row per piece. The Instructions tab explains every column; row 2 is an example and is never imported.
+2. Put web copies of the images in `content/images/` in the GitHub repository (Add file, Upload files) with filenames matching the `images` column.
+3. Ezra runs `node scripts/import-artworks.mjs <your-file.xlsx> --dry-run` to check the sheet, then without `--dry-run` to create the products as drafts, and with `--publish` once the store app has publication and shipping scopes. Rows that already exist are skipped, so the sheet can be corrected and re-run.
+4. Review each draft in the admin, then set it to Active (section 6 below).
+
+## One at a time: copy the template
+
+Ten minutes per piece once the images are ready.
 
 ## 1. Duplicate the template
 

@@ -26,6 +26,7 @@ set -a; . ./.env; set +a
 shopify theme push --theme 157866459276          # update Staging from this checkout
 shopify theme check                               # lint
 node scripts/setup-store.mjs --sync               # publish new products, assign shipping profiles
+node scripts/import-artworks.mjs sheet.xlsx --dry-run   # validate an intake sheet, then run without --dry-run (add --publish once scopes exist)
 ```
 
 ## Content status
