@@ -237,7 +237,7 @@ Not needed: a paid theme, hosting, an email service, an external CMS, analytics 
 
 1. The artist's display name for the store and a one-line tagline (placeholder is fine).
 2. Three to five sample images for the palette study.
-3. Domain: `rightbrainstudios.store`, registered 13 September 2026 at Cloudflare. Still to do: point it at Shopify and set up forwarding for `hello@`.
+3. Domain: `rightbrainstudios.store`, registered 13 September 2026 at Cloudflare and connected to Shopify as the primary domain. Still to do: forwarding for `hello@` and Shopify's sender-domain authentication.
 4. Public contact address: `hello@rightbrainstudios.store` (decided). It is a theme setting used by the footer and contact page, and must also be the store's sender email once forwarding exists.
 5. The Instagram handle.
 6. The Shopify store created by the artist, with Shopify Payments onboarding started, and a Theme Access password sent to me (the app's delivery link expires after seven days).

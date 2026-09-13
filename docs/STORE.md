@@ -6,7 +6,7 @@ Operational facts about the live store, kept here because build sessions are eph
 |---|---|
 | Store name | Right Brain Studios |
 | Store address | `m75tiq-bf.myshopify.com` (admin at `admin.shopify.com/store/m75tiq-bf`) |
-| Domain | `rightbrainstudios.store`, registered 13 September 2026 at Cloudflare, Cloudflare nameservers; not yet connected to Shopify |
+| Domain | `rightbrainstudios.store`, registered 13 September 2026 at Cloudflare (Cloudflare nameservers), connected to Shopify and set as the primary domain; the myshopify address redirects to it |
 | Public contact email | `hello@rightbrainstudios.store` (theme setting `studio_contact_email`; must also be the sender email in Settings > General, and needs forwarding at Cloudflare) |
 | Plan | Basic, monthly |
 | Payments | Shopify Payments live, payouts to Shopify Balance |
@@ -16,7 +16,7 @@ Operational facts about the live store, kept here because build sessions are eph
 | Apps installed | Theme Access, Search & Discovery, Shopify Flow |
 | Dev Dashboard app | "Store Setup": `read/write_products`, `read/write_metaobject_definitions`; needs `read/write_publications` and `read/write_shipping` for `--sync` |
 | Live theme | Horizon (stock), id 157864493196 |
-| Staging theme | "Staging", unpublished, id 157866459276; preview `https://m75tiq-bf.myshopify.com?preview_theme_id=157866459276` behind the storefront password |
+| Staging theme | "Staging", unpublished, id 157866459276; preview `https://rightbrainstudios.store/?preview_theme_id=157866459276` behind the storefront password |
 | Storefront | Password page on during the build |
 
 ## Routine commands
