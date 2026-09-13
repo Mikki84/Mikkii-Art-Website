@@ -89,12 +89,14 @@ Basic has no staff seats, so Ezra and Claude work through two scoped credentials
 2. Open the app, **Create password**. Name: "Ezra / Claude". Email: Ezra's email.
 3. Shopify emails Ezra a link that expires after 7 days and can be opened once. Ezra opens it, copies the password (it starts with `shptka_`), and pastes it into the Claude session.
 
-### E2. Admin API token (for the one-time setup script)
-1. **Settings**, **Apps and sales channels**, **Develop apps**. If prompted, **Allow custom app development**.
-2. **Create an app**, name it "Store setup".
-3. **Configure Admin API scopes**: tick `read_products`, `write_products`, `read_metaobject_definitions`, `write_metaobject_definitions`. Save.
-4. **Install app**. Under **API credentials**, reveal the **Admin API access token** (starts with `shpat_`). It is shown once. Send it to Ezra privately.
-5. After the setup script has run, this app can be uninstalled from the same screen, which revokes the token.
+### E2. App credentials for the setup script
+Shopify no longer allows custom apps created inside the admin, so the app is created in the Shopify Dev Dashboard and installed on the store. The setup script mints its own short-lived tokens from the app's client credentials.
+1. Go to `dev.shopify.com` (the Dev Dashboard) and sign in with the store owner's account.
+2. **Create app**, name it "Store setup".
+3. Under the app's **Access** or **Configuration** settings, set the Admin API scopes: `read_products`, `write_products`, `read_metaobject_definitions`, `write_metaobject_definitions`, `read_publications`, `write_publications`, `read_shipping`, `write_shipping`. The last four let the script publish artworks to the Online Store and assign print and original variants to their shipping profiles.
+4. **Install** the app on the store and approve the scopes.
+5. From the app's settings copy the **Client ID** and **Client secret** (starts with `shpss_`) and send both to Ezra privately. They go into the gitignored `.env` file, never into git.
+6. If scopes are added later, save the app configuration and reinstall it on the store so the new scopes take effect.
 
 ## Part F. Free apps to install now (artist, 5 minutes)
 
@@ -128,7 +130,7 @@ Available as soon as Part C is approved, before the theme exists:
 ## Part J. What to send to Ezra and Claude
 
 - Theme Access password (`shptka_…`) and the store's `.myshopify.com` address.
-- Admin API token (`shpat_…`) from Part E2.
+- The app's Client ID and Client secret (`shpss_…`) from Part E2.
 - The chosen domain name.
 - Three to five sample images, the artist's display name and tagline, the inquiry email, the Instagram handle, and initial print sizes and prices (or "use placeholders").
 
