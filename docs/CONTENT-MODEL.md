@@ -73,7 +73,7 @@ Collection description holds the series introduction. Collection image is the se
 
 ## Theme settings (Settings in the theme editor)
 
-Artist display name, tagline, inquiry email, Instagram handle, palette, and typography. These replace a separate site-settings object.
+Under **Theme settings, Studio**: public contact email (`studio_contact_email`, default `hello@rightbrainstudios.store`), Instagram handle (`studio_instagram_handle`), and tagline (`studio_tagline`). The `Studio contact` block reads these wherever it is placed (footer, contact page). Palette and typography live in Horizon's own settings groups. The store name comes from Settings > General.
 
 ## Filters (Search & Discovery app)
 

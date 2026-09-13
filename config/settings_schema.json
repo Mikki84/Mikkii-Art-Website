@@ -8,6 +8,38 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
+    "name": "Studio",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Contact"
+      },
+      {
+        "type": "text",
+        "id": "studio_contact_email",
+        "label": "Public contact email",
+        "default": "hello@rightbrainstudios.store",
+        "info": "Shown in the footer and on the contact page. Set the same address as the sender email in Settings > General so form submissions and replies reach it."
+      },
+      {
+        "type": "text",
+        "id": "studio_instagram_handle",
+        "label": "Instagram handle",
+        "info": "Without the @"
+      },
+      {
+        "type": "header",
+        "content": "Studio"
+      },
+      {
+        "type": "text",
+        "id": "studio_tagline",
+        "label": "Tagline",
+        "info": "One line shown under the studio name on the home page"
+      }
+    ]
+  },
+  {
     "name": "t:names.logo_and_favicon",
     "settings": [
       {

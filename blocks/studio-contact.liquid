@@ -1,0 +1,105 @@
+{%- doc -%}
+  Studio contact block. Shows the public contact email and Instagram link
+  from the theme settings (Theme settings > Studio) so the address is set
+  once and used everywhere: footer, contact page, artwork inquiries.
+{%- enddoc -%}
+
+{% liquid
+  assign email = settings.studio_contact_email | strip
+  assign handle = settings.studio_instagram_handle | remove: '@' | strip
+%}
+
+<div class="studio-contact studio-contact--{{ block.settings.alignment }}" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank %}
+    <p class="studio-contact__heading">{{ block.settings.heading }}</p>
+  {% endif %}
+  {% if block.settings.show_email and email != blank %}
+    <a class="studio-contact__link" href="mailto:{{ email }}">{{ email }}</a>
+  {% endif %}
+  {% if block.settings.show_instagram and handle != blank %}
+    <a
+      class="studio-contact__link"
+      href="https://www.instagram.com/{{ handle }}/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Instagram @{{ handle }}
+    </a>
+  {% endif %}
+  {% if block.settings.note != blank %}
+    <p class="studio-contact__note">{{ block.settings.note }}</p>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .studio-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .studio-contact--center {
+    align-items: center;
+    text-align: center;
+  }
+  .studio-contact__heading {
+    margin: 0;
+    font-weight: 600;
+  }
+  .studio-contact__link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .studio-contact__note {
+    margin: 0;
+    opacity: 0.75;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Studio contact",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Contact"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "Show email address",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_instagram",
+      "label": "Show Instagram link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note",
+      "info": "Optional line under the links"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "start"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Studio contact"
+    }
+  ]
+}
+{% endschema %}

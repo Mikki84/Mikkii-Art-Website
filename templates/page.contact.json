@@ -105,9 +105,20 @@
             }
           },
           "block_order": []
+        },
+        "studio_contact": {
+          "type": "studio-contact",
+          "settings": {
+            "heading": "Or write directly",
+            "show_email": true,
+            "show_instagram": true,
+            "note": "Replies come from the artist, usually within a few days.",
+            "alignment": "center"
+          }
         }
       },
       "block_order": [
+        "studio_contact",
         "contact_form_UwiCkQ"
       ],
       "name": "t:names.contact_form",

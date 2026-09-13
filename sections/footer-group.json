@@ -171,10 +171,21 @@
             "padding-inline-start": 0,
             "padding-inline-end": 0
           }
+        },
+        "studio_contact": {
+          "type": "studio-contact",
+          "settings": {
+            "heading": "Contact",
+            "show_email": true,
+            "show_instagram": true,
+            "note": "",
+            "alignment": "start"
+          }
         }
       },
       "block_order": [
         "group_wErUQf",
+        "studio_contact",
         "menu_footer",
         "menu_main"
       ],

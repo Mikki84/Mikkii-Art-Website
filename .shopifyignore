@@ -7,3 +7,4 @@ LICENSE-HORIZON.md
 .gitignore
 .shopifyignore
 scripts/*
+.env.example

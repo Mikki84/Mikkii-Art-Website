@@ -108,6 +108,8 @@ Not yet: Instafeed (Instagram) and the print-on-demand app come at their milesto
 
 ## Part G. Domain (Ezra, 15 minutes)
 
+Status: `rightbrainstudios.store` is registered at Cloudflare (13 September 2026). Steps 2 to 5 remain.
+
 1. Create a Cloudflare account at `cloudflare.com`. In the dashboard, **Domain Registration**, **Register Domains**, search the candidate names, and buy the chosen one (a .com is about $10 per year; the price rises slightly after 1 November 2026).
 2. In Cloudflare **DNS** for the domain, add: an **A** record, name `@`, content `23.227.38.65`, proxy **off** (grey cloud); and a **CNAME** record, name `www`, content `shops.myshopify.com`, proxy **off**.
 3. In Shopify: **Settings**, **Domains**, **Connect existing domain**, enter the domain, verify. Set it as the primary domain, with `www` redirecting to the bare domain or the reverse, whichever you prefer.
