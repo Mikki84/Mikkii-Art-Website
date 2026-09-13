@@ -8,11 +8,14 @@
  *
  * Requirements:
  *   - Node 22+
- *   - A custom app in the store (Settings > Apps and sales channels > Develop apps)
- *     with Admin API scopes: write_products, read_products, write_metaobject_definitions
- *   - Environment variables:
+ *   - An app created in the Shopify Dev Dashboard and installed on the store, with
+ *     Admin API scopes: write_products, read_products, write_metaobject_definitions,
+ *     read_metaobject_definitions (and write_shipping to assign shipping profiles).
+ *   - Environment variables (see .env, which is gitignored):
  *       SHOPIFY_STORE=your-store.myshopify.com
- *       SHOPIFY_ADMIN_TOKEN=shpat_...
+ *       SHOPIFY_CLIENT_ID=...
+ *       SHOPIFY_CLIENT_SECRET=shpss_...
+ *     The script mints a short-lived access token with the client credentials grant.
  *
  * Usage:
  *   node scripts/setup-store.mjs            # definitions only
@@ -21,15 +24,39 @@
  * Safe to re-run: existing definitions are reported and skipped.
  */
 
+import { readFileSync } from "node:fs";
+
+// Load .env from the repository root if present (no dependency on dotenv).
+try {
+  for (const line of readFileSync(new URL("../.env", import.meta.url), "utf8").split("\n")) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+    if (m && process.env[m[1]] === undefined) process.env[m[1]] = m[2];
+  }
+} catch { /* no .env; rely on the environment */ }
+
 const STORE = process.env.SHOPIFY_STORE;
-const TOKEN = process.env.SHOPIFY_ADMIN_TOKEN;
+const CLIENT_ID = process.env.SHOPIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SHOPIFY_CLIENT_SECRET;
 const API_VERSION = "2026-07";
 const WITH_SAMPLES = process.argv.includes("--samples");
 
-if (!STORE || !TOKEN) {
-  console.error("Set SHOPIFY_STORE and SHOPIFY_ADMIN_TOKEN first.");
+if (!STORE || !CLIENT_ID || !CLIENT_SECRET) {
+  console.error("Set SHOPIFY_STORE, SHOPIFY_CLIENT_ID, and SHOPIFY_CLIENT_SECRET first (see .env).");
   process.exit(1);
 }
+
+async function mintToken() {
+  const res = await fetch(`https://${STORE}/admin/oauth/access_token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ client_id: CLIENT_ID, client_secret: CLIENT_SECRET, grant_type: "client_credentials" }),
+  });
+  const json = await res.json();
+  if (!json.access_token) throw new Error(`Token request failed: ${JSON.stringify(json)}`);
+  console.log(`token minted (scopes: ${json.scope})`);
+  return json.access_token;
+}
+const TOKEN = await mintToken();
 
 async function gql(query, variables = {}) {
   const res = await fetch(`https://${STORE}/admin/api/${API_VERSION}/graphql.json`, {

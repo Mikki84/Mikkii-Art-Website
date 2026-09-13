@@ -1,9 +1,9 @@
 # Files that are not part of the theme and must never be pushed to Shopify
-docs/
-.github/
+docs/*
+.github/*
 README.md
 LICENSE-HORIZON.md
 .theme-check.yml
 .gitignore
 .shopifyignore
-scripts/
+scripts/*
