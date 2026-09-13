@@ -42,6 +42,7 @@ Have ready before starting:
 - Store contact email: where Shopify sends notices to the owner. Sender email: what customers see; use the inquiries/orders address.
 - Billing address: the studio or home address. This is also the shipping origin.
 - Store currency: **USD**. Time zone: the artist's. Unit system: **Imperial** (inches, pounds), weight unit **lb**.
+- Order processing (this setting lives here now, not under Checkout): **Automatically fulfil only gift cards**; everything else is fulfilled by hand, or by the print partner later.
 
 ### D2. Checkout
 **Settings**, **Checkout**.
@@ -49,7 +50,6 @@ Have ready before starting:
 - Customer contact method: **Email**.
 - Full name: **Require first and last name**. Company name: **Don't include**. Address line 2: optional. Shipping address phone: **Optional**.
 - Marketing options: leave the email sign-up box present but unchecked by default.
-- Order processing: **Automatically fulfil only gift cards**; everything else is fulfilled manually (or by the print partner later).
 - Leave abandoned checkout emails on.
 
 ### D3. Shipping
