@@ -41,4 +41,4 @@ Ink primary button, outlined secondary, teal for "Request this print" where chec
 
 ## Open
 
-The tagline (placeholder: "Loud color, steady hand."), the Instagram handle, and the prints shipping copy, which depends on the fulfilment decision.
+The tagline (placeholder: "Loud color, steady hand."; a Frida Kahlo epigraph is under consideration), and the prints shipping copy, which depends on the fulfilment decision.

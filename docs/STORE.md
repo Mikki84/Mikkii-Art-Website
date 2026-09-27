@@ -7,6 +7,7 @@ Operational facts about the live store, kept here because build sessions are eph
 | Store name | Right Brain Studios |
 | Store address | `m75tiq-bf.myshopify.com` (admin at `admin.shopify.com/store/m75tiq-bf`) |
 | Domain | `rightbrainstudios.store`, registered 13 September 2026 at Cloudflare (Cloudflare nameservers), connected to Shopify and set as the primary domain; the myshopify address redirects to it |
+| Instagram | `@Mikki.Samet` (theme setting `studio_instagram_handle`, set at build) |
 | Public contact email | `hello@rightbrainstudios.store` (theme setting `studio_contact_email`; must also be the sender email in Settings > General, and needs forwarding at Cloudflare) |
 | Plan | Basic, monthly |
 | Payments | Shopify Payments live, payouts to Shopify Balance |
