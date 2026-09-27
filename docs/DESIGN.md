@@ -35,7 +35,7 @@ Ink primary button, outlined secondary, teal for "Request this print" where chec
 ## Pages
 
 - **Home:** wordmark and nav (Work, Series, About, Contact); hero with one featured piece and the tagline; Selected work masonry; Instagram strip; footer with contact block and policies.
-- **Work:** title, filters (medium, size, availability), four-column masonry with title, medium, and price-from or status.
+- **Work:** title, filters (medium, size, availability), justified rows (each row shares one height, no cropping; decided 27 September 2026 over masonry) with title, medium, and price-from or status.
 - **Artwork:** image with zoom left; sticky details right: series and year eyebrow, title, medium detail, dimensions; Original block driven by sale mode; Prints block with size and paper picker, price, Add to cart; description; related pieces from the series.
 - **Phone:** single column, details below the image, same blocks.
 
