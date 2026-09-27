@@ -34,11 +34,11 @@ Ink primary button, outlined secondary, teal for "Request this print" where chec
 
 ## Pages
 
-- **Home:** wordmark and nav (Work, Series, About, Contact); hero with one featured piece and the tagline; Selected work masonry; Instagram strip; footer with contact block and policies.
+- **Home:** wordmark and nav (Work, Series, About, Contact); hero is the featured piece alone with a caption and one button, no tagline (decided 27 September 2026: her work carries no words); Selected work masonry; Instagram strip; footer with contact block and policies.
 - **Work:** title, filters (medium, size, availability), justified rows (each row shares one height, no cropping; decided 27 September 2026 over masonry) with title, medium, and price-from or status.
 - **Artwork:** image with zoom left; sticky details right: series and year eyebrow, title, medium detail, dimensions; Original block driven by sale mode; Prints block with size and paper picker, price, Add to cart; description; related pieces from the series.
 - **Phone:** single column, details below the image, same blocks.
 
 ## Open
 
-The tagline (placeholder: "Loud color, steady hand."; a Frida Kahlo epigraph is under consideration), and the prints shipping copy, which depends on the fulfilment decision.
+Whether a Frida Kahlo epigraph appears on the About page, and the prints shipping copy, which depends on the fulfilment decision.
