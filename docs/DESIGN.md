@@ -23,7 +23,7 @@ Artwork always sits on Paper, never on a saturated color. Pieces on black paper 
 
 ## Typography
 
-- **Pairing A (recommended):** Instrument Serif for titles and the wordmark; Karla for body, captions, prices, filters.
+- **Pairing A (chosen, 27 September 2026):** Instrument Serif for titles and the wordmark; Karla for body, captions, prices, filters.
 - **Pairing B:** Syne for titles; Source Sans 3 for body. Bolder and more graphic; competes slightly with the art.
 
 Both from Google Fonts, self-hosted in the theme at build time.
@@ -41,4 +41,4 @@ Ink primary button, outlined secondary, teal for "Request this print" where chec
 
 ## Open
 
-Type pairing, the tagline (placeholder: "Loud color, steady hand."), the Instagram handle, and the prints shipping copy, which depends on the fulfilment decision.
+The tagline (placeholder: "Loud color, steady hand."), the Instagram handle, and the prints shipping copy, which depends on the fulfilment decision.
