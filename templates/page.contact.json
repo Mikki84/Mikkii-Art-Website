@@ -115,11 +115,16 @@
             "note": "Replies come from the artist, usually within a few days.",
             "alignment": "center"
           }
+        },
+        "inquiry_prefill": {
+          "type": "studio-inquiry-prefill",
+          "settings": {}
         }
       },
       "block_order": [
         "studio_contact",
-        "contact_form_UwiCkQ"
+        "contact_form_UwiCkQ",
+        "inquiry_prefill"
       ],
       "name": "t:names.contact_form",
       "settings": {

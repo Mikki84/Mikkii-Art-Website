@@ -1,0 +1,43 @@
+{%- doc -%}
+  Invisible helper for the contact page: when the page is opened from an
+  artwork ("?artwork=Title&size=8 × 10 in" or "&about=original"), it writes an
+  opening line into the empty message field so the artist knows what the
+  inquiry is about.
+{%- enddoc -%}
+
+{% if request.design_mode %}
+  <p class="artwork-note" {{ block.shopify_attributes }}>Inquiry pre-fill helper (invisible on the storefront).</p>
+{% else %}
+  <span hidden {{ block.shopify_attributes }}></span>
+{% endif %}
+
+{% javascript %}
+  (() => {
+    const params = new URLSearchParams(window.location.search);
+    const artwork = params.get('artwork');
+    if (!artwork) return;
+    const fill = () => {
+      const body = document.querySelector('textarea[name="contact[body]"]');
+      if (!body || body.value.trim()) return;
+      const size = params.get('size');
+      const about = params.get('about');
+      let line = `I'm interested in "${artwork}"`;
+      if (size) line += `, as a print at ${size}`;
+      else if (about === 'original') line += `, the original`;
+      body.value = line + '. ';
+      body.focus();
+      body.setSelectionRange(body.value.length, body.value.length);
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fill, { once: true });
+    else fill();
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Inquiry pre-fill",
+  "tag": null,
+  "settings": [],
+  "presets": [{ "name": "Inquiry pre-fill" }]
+}
+{% endschema %}

@@ -1,0 +1,13 @@
+{%- doc -%}
+  Prints a dimension metafield value without trailing zeros, e.g. 9 or 12.5.
+  @param {object} measurement - A dimension metafield value
+{%- enddoc -%}
+{%- liquid
+  assign n = measurement.value
+  assign whole = n | floor
+  if n == whole
+    echo whole
+  else
+    echo n | round: 2
+  endif
+-%}

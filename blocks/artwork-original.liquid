@@ -1,0 +1,97 @@
+{%- doc -%}
+  The original's block on an artwork page, driven by the art.original_status
+  field: For sale (price and add to cart), Inquire or Reserved (inquiry button),
+  Sold or Not for sale (label), Digital work (nothing).
+{%- enddoc -%}
+
+{% liquid
+  assign p = closest.product
+  assign status = p.metafields.art.original_status.value
+  assign note = p.metafields.art.original_note.value
+  assign edition_index = -1
+  for option_name in p.options
+    if option_name == 'Edition'
+      assign edition_index = forloop.index0
+    endif
+  endfor
+  assign original_variant = blank
+  for v in p.variants
+    if edition_index > -1 and v.options[edition_index] == 'Original'
+      assign original_variant = v
+    endif
+  endfor
+  assign inquiry_page = settings.studio_inquiry_page | default: '/pages/contact'
+  assign title_param = p.title | url_param_escape
+  assign inquiry_href = inquiry_page | append: '?artwork=' | append: title_param | append: '&about=original'
+%}
+
+{% if status == blank or status == 'Digital work' %}
+  {% if request.design_mode %}
+    <p class="artwork-note" {{ block.shopify_attributes }}>Original block hidden: this piece has no physical original for sale (status "{{ status | default: 'not set' }}").</p>
+  {% endif %}
+{% else %}
+  <div class="artwork-block artwork-original" {{ block.shopify_attributes }}>
+    <div class="artwork-block__head">
+      <h3 class="artwork-block__title">{{ block.settings.heading }}</h3>
+      {% case status %}
+        {% when 'For sale' %}
+          {% if original_variant != blank and original_variant.available %}
+            <span class="artwork-price">{{ original_variant.price | money_without_trailing_zeros }}</span>
+          {% else %}
+            <span class="studio-status studio-status--sold">Sold</span>
+          {% endif %}
+        {% when 'Inquire' %}
+          <span class="studio-status">Available on inquiry</span>
+        {% when 'Reserved' %}
+          <span class="studio-status studio-status--reserved">Reserved</span>
+        {% when 'Sold' %}
+          <span class="studio-status studio-status--sold">Sold</span>
+        {% when 'Not for sale' %}
+          <span class="studio-status studio-status--sold">Not for sale</span>
+      {% endcase %}
+    </div>
+    {% if note != blank %}<p class="artwork-note">{{ note }}</p>{% endif %}
+
+    {% if status == 'For sale' and original_variant != blank and original_variant.available %}
+      {% assign form_id = 'ArtworkOriginal-' | append: section.id %}
+      <product-form-component
+        data-section-id="{{ section.id }}"
+        data-product-id="{{ p.id }}"
+        data-product-url="{{ p.url }}"
+        on:submit="/handleSubmit"
+        data-quantity-default="1"
+        data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+      >
+        <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+        {% form 'product', p, id: form_id, data-type: 'add-to-cart-form' %}
+          <input type="hidden" name="id" ref="variantId" value="{{ original_variant.id }}">
+          {% render 'add-to-cart-button',
+            id: form_id,
+            class: '',
+            can_add_to_cart: true,
+            show_icon: true,
+            product: p,
+            add_to_cart_text: block.settings.buy_label
+          %}
+        {% endform %}
+      </product-form-component>
+      <p class="artwork-note">One of a kind. Ships from the studio.</p>
+    {% elsif status == 'Inquire' or status == 'Reserved' %}
+      <a class="button button-secondary" href="{{ inquiry_href }}">{{ block.settings.inquire_label }}</a>
+      <p class="artwork-note">The artist replies personally, usually within a few days.</p>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Artwork original",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Original" },
+    { "type": "text", "id": "inquire_label", "label": "Inquire button", "default": "Inquire about the original" },
+    { "type": "text", "id": "buy_label", "label": "Buy button", "default": "Buy the original" }
+  ],
+  "presets": [{ "name": "Artwork original" }]
+}
+{% endschema %}

@@ -1,0 +1,193 @@
+{%- doc -%}
+  Print picker for an artwork: size and paper as option tiles, price for the
+  selection, and Horizon's add-to-cart form. Reads variants whose Edition is
+  "Print"; renders nothing when the piece has no prints.
+{%- enddoc -%}
+
+{% liquid
+  assign p = closest.product
+  assign edition_index = -1
+  assign size_index = -1
+  assign paper_index = -1
+  for option_name in p.options
+    case option_name
+      when 'Edition'
+        assign edition_index = forloop.index0
+      when 'Size'
+        assign size_index = forloop.index0
+      when 'Paper'
+        assign paper_index = forloop.index0
+    endcase
+  endfor
+  assign sizes = ''
+  assign papers = ''
+  assign default_variant = blank
+  assign print_count = 0
+  for v in p.variants
+    if edition_index > -1 and v.options[edition_index] == 'Print'
+      assign print_count = print_count | plus: 1
+      if default_variant == blank and v.available
+        assign default_variant = v
+      endif
+      if size_index > -1
+        assign s = v.options[size_index]
+        assign sizes_check = '|' | append: sizes | append: '|'
+        assign s_check = '|' | append: s | append: '|'
+        unless sizes_check contains s_check
+          assign sizes = sizes | append: '|' | append: s
+        endunless
+      endif
+      if paper_index > -1
+        assign pp = v.options[paper_index]
+        assign papers_check = '|' | append: papers | append: '|'
+        assign pp_check = '|' | append: pp | append: '|'
+        unless papers_check contains pp_check
+          assign papers = papers | append: '|' | append: pp
+        endunless
+      endif
+    endif
+  endfor
+  assign sizes = sizes | remove_first: '|' | split: '|'
+  assign papers = papers | remove_first: '|' | split: '|'
+  if default_variant == blank
+    for v in p.variants
+      if edition_index > -1 and v.options[edition_index] == 'Print'
+        assign default_variant = v
+        break
+      endif
+    endfor
+  endif
+%}
+
+{% if print_count == 0 %}
+  {% if request.design_mode %}
+    <p class="artwork-note" {{ block.shopify_attributes }}>Prints block hidden: this piece has no Print variants.</p>
+  {% endif %}
+{% else %}
+  {% liquid
+    assign form_id = 'ArtworkPrints-' | append: section.id
+    assign default_size = ''
+    assign default_paper = ''
+    if size_index > -1
+      assign default_size = default_variant.options[size_index]
+    endif
+    if paper_index > -1
+      assign default_paper = default_variant.options[paper_index]
+    endif
+  %}
+  <artwork-prints class="artwork-block artwork-prints" {{ block.shopify_attributes }}>
+    <div class="artwork-block__head">
+      <h3 class="artwork-block__title">{{ block.settings.heading }}</h3>
+      <span class="artwork-price" data-price>{{ default_variant.price | money_without_trailing_zeros }}</span>
+    </div>
+
+    {% if sizes.size > 0 %}
+      <fieldset class="artwork-picker">
+        <legend class="artwork-picker__label">Size</legend>
+        <div class="artwork-picker__opts">
+          {% for s in sizes %}
+            <label class="artwork-opt">
+              <input type="radio" name="artwork-size-{{ block.id }}" value="{{ s | escape }}" data-option="size" {% if s == default_size %}checked{% endif %}>
+              <span>{{ s }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endif %}
+    {% if papers.size > 0 %}
+      <fieldset class="artwork-picker">
+        <legend class="artwork-picker__label">Paper</legend>
+        <div class="artwork-picker__opts">
+          {% for pp in papers %}
+            <label class="artwork-opt">
+              <input type="radio" name="artwork-paper-{{ block.id }}" value="{{ pp | escape }}" data-option="paper" {% if pp == default_paper %}checked{% endif %}>
+              <span>{{ pp }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endif %}
+
+    <product-form-component
+      data-section-id="{{ section.id }}"
+      data-product-id="{{ p.id }}"
+      data-product-url="{{ p.url }}"
+      on:submit="/handleSubmit"
+      data-quantity-default="1"
+      data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+    >
+      <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+      {% form 'product', p, id: form_id, data-type: 'add-to-cart-form' %}
+        <input type="hidden" name="id" ref="variantId" value="{{ default_variant.id }}" data-variant-input>
+        {% render 'add-to-cart-button',
+          id: form_id,
+          class: '',
+          can_add_to_cart: default_variant.available,
+          show_icon: true,
+          product: p,
+          add_to_cart_text: 'Add to cart'
+        %}
+      {% endform %}
+    </product-form-component>
+    {% if block.settings.note != blank %}<p class="artwork-note">{{ block.settings.note }}</p>{% endif %}
+
+    <script type="application/json" data-artwork-variants>
+      [
+        {%- for v in p.variants -%}
+          {%- if edition_index > -1 and v.options[edition_index] == 'Print' -%}
+            {"id": {{ v.id }}, "size": {{ v.options[size_index] | json }}, "paper": {{ v.options[paper_index] | json }}, "price": {{ v.price | money_without_trailing_zeros | json }}, "available": {{ v.available | json }}}{% unless forloop.last %},{% endunless %}
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    </script>
+  </artwork-prints>
+{% endif %}
+
+{% javascript %}
+  class ArtworkPrints extends HTMLElement {
+    connectedCallback() {
+      const raw = this.querySelector('[data-artwork-variants]');
+      this.variants = raw ? JSON.parse(raw.textContent.replace(/,\s*\]/, ']')) : [];
+      this.input = this.querySelector('[data-variant-input]');
+      this.price = this.querySelector('[data-price]');
+      this.button = this.querySelector('button[name="add"]');
+      this.addEventListener('change', (e) => { if (e.target.matches('input[type="radio"]')) this.update(); });
+      this.update();
+    }
+    picked(kind) {
+      const el = this.querySelector(`input[data-option="${kind}"]:checked`);
+      return el ? el.value : null;
+    }
+    update() {
+      const size = this.picked('size'), paper = this.picked('paper');
+      const match = this.variants.find((v) => (size === null || v.size === size) && (paper === null || v.paper === paper));
+      // Mark options that have no available variant for the other selection
+      for (const opt of this.querySelectorAll('input[data-option]')) {
+        const kind = opt.dataset.option;
+        const ok = this.variants.some((v) => v.available && (kind === 'size' ? v.size === opt.value && (paper === null || v.paper === paper) : v.paper === opt.value && (size === null || v.size === size)));
+        opt.closest('.artwork-opt').classList.toggle('artwork-opt--unavailable', !ok);
+      }
+      if (!match) return;
+      if (this.input) this.input.value = match.id;
+      if (this.price) this.price.textContent = match.price;
+      if (this.button) {
+        this.button.disabled = !match.available;
+        const label = this.button.childNodes;
+        for (const n of label) if (n.nodeType === 3 && n.textContent.trim()) n.textContent = match.available ? ' Add to cart ' : ' Sold out ';
+      }
+    }
+  }
+  if (!customElements.get('artwork-prints')) customElements.define('artwork-prints', ArtworkPrints);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Artwork prints",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Prints" },
+    { "type": "text", "id": "note", "label": "Note under the button", "default": "Archival pigment print, made to order. Ships within the US." }
+  ],
+  "presets": [{ "name": "Artwork prints" }]
+}
+{% endschema %}

@@ -61,19 +61,29 @@
       {% paginate collection.products by products_per_page %}
         {% capture children %}
           {% for product in collection.products %}
+            {% liquid
+              assign artwork_ratio = product.featured_media.preview_image.aspect_ratio | default: 1
+            %}
             <li
               id="{{ section.id }}-{{ product.id }}"
               class="product-grid__item product-grid__item--{{ forloop.index0 }}"
               data-page="{{ paginate.current_page }}"
               data-product-id="{{ product.id }}"
               ref="cards[]"
+              {% if section.settings.layout_type == 'justified' %}
+                style="--ar: {{ artwork_ratio }};"
+              {% endif %}
             >
-              {% content_for 'block',
-                type: '_product-card',
-                id: 'product-card',
-                closest.product: product,
-                product_view_context: 'collection'
-              %}
+              {% if section.settings.layout_type == 'justified' %}
+                {% render 'artwork-card', product: product %}
+              {% else %}
+                {% content_for 'block',
+                  type: '_product-card',
+                  id: 'product-card',
+                  closest.product: product,
+                  product_view_context: 'collection'
+                %}
+              {% endif %}
             </li>
           {% endfor %}
         {% endcapture %}
@@ -109,6 +119,10 @@
         {
           "value": "organic",
           "label": "t:options.editorial"
+        },
+        {
+          "value": "justified",
+          "label": "Justified rows (artwork)"
         }
       ],
       "default": "grid"

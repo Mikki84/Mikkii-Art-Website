@@ -1,0 +1,62 @@
+{%- doc -%}
+  Card for the justified artwork gallery: image at its own proportion, title,
+  medium, and either the print price or the original's status.
+
+  @param {object} product - The product (artwork)
+{%- enddoc -%}
+
+{% liquid
+  assign img = product.featured_media.preview_image
+  assign edition_index = -1
+  for option_name in product.options
+    if option_name == 'Edition'
+      assign edition_index = forloop.index0
+    endif
+  endfor
+  assign has_prints = false
+  assign print_min = 0
+  assign original_variant = blank
+  for v in product.variants
+    assign edition = ''
+    if edition_index > -1
+      assign edition = v.options[edition_index]
+    endif
+    if edition == 'Print'
+      assign has_prints = true
+      if print_min == 0 or v.price < print_min
+        assign print_min = v.price
+      endif
+    elsif edition == 'Original'
+      assign original_variant = v
+    endif
+  endfor
+  assign medium = product.metafields.art.medium_detail.value | default: product.type
+  assign status = product.metafields.art.original_status.value
+%}
+
+<div class="artwork-card">
+  <a class="artwork-card__link" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+    {%- if img -%}
+      {{ img | image_url: width: 1400 | image_tag: widths: '320, 480, 640, 960, 1200, 1400', sizes: '(min-width: 750px) 40vw, 100vw', class: 'artwork-card__img', loading: 'lazy' }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'artwork-card__img' }}
+    {%- endif -%}
+  </a>
+  <h3 class="artwork-card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+  <div class="artwork-card__meta">
+    <span>{{ medium }}</span>
+    <span>
+      {%- if has_prints -%}
+        Prints from {{ print_min | money_without_trailing_zeros }}
+      {%- elsif status == 'For sale' and original_variant != blank and original_variant.available -%}
+        <span class="studio-status">{{ original_variant.price | money_without_trailing_zeros }}</span>
+      {%- elsif status == 'Inquire' -%}
+        <span class="studio-status">Original available</span>
+      {%- elsif status == 'Reserved' -%}
+        <span class="studio-status studio-status--reserved">Reserved</span>
+      {%- elsif status == 'Sold' -%}
+        <span class="studio-status studio-status--sold">Sold</span>
+      {%- endif -%}
+    </span>
+  </div>
+</div>

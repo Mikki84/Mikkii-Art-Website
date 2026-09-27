@@ -1,0 +1,56 @@
+{%- doc -%}
+  Series and year eyebrow, medium, dimensions, and size class for an artwork,
+  read from the art.* metafields. Place inside the product details.
+{%- enddoc -%}
+
+{% liquid
+  assign p = closest.product
+  assign year = p.metafields.art.year.value
+  assign medium = p.metafields.art.medium_detail.value | default: p.type
+  assign h = p.metafields.art.height.value
+  assign w = p.metafields.art.width.value
+  assign d = p.metafields.art.depth.value
+  assign size_class = p.metafields.art.size_class.value
+  assign unit = h.unit | default: w.unit | default: 'in'
+  if unit contains 'INCH'
+    assign unit = 'in'
+  elsif unit contains 'CENT'
+    assign unit = 'cm'
+  endif
+  assign series = blank
+  for c in p.collections
+    if c.metafields.art.is_series.value
+      assign series = c
+      break
+    endif
+  endfor
+%}
+
+<div class="artwork-meta" {{ block.shopify_attributes }}>
+  {% if series != blank or year %}
+    <span class="artwork-meta__eyebrow">
+      {%- if series != blank -%}<a href="{{ series.url }}">{{ series.title }}</a>{%- endif -%}
+      {%- if series != blank and year %} · {% endif -%}
+      {{ year }}
+    </span>
+  {% endif %}
+  {% if medium != blank %}<span>{{ medium }}</span>{% endif %}
+  {% if h or w %}
+    <span>
+      {%- if h %}{% render 'artwork-dimension', measurement: h %}{% endif -%}
+      {%- if h and w %} × {% endif -%}
+      {%- if w %}{% render 'artwork-dimension', measurement: w %}{% endif -%}
+      {%- if d %} × {% render 'artwork-dimension', measurement: d %}{% endif %} {{ unit }}
+      {%- if size_class != blank %} · {{ size_class }}{% endif -%}
+    </span>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Artwork details",
+  "tag": null,
+  "settings": [],
+  "presets": [{ "name": "Artwork details" }]
+}
+{% endschema %}
