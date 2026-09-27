@@ -31,8 +31,7 @@
         "type": "url",
         "id": "studio_inquiry_page",
         "label": "Inquiry page",
-        "default": "/pages/contact",
-        "info": "Where 'Inquire' buttons send people. The artwork and print size are pre-filled into the message."
+        "info": "Where 'Inquire' buttons send people. Leave empty to use the Contact page. The artwork and print size are pre-filled into the message."
       },
       {
         "type": "header",
